@@ -13,14 +13,11 @@
       --text: #e5e7eb;
       --muted: #9ca3af;
       --border: #1f2937;
-      --danger: #f97373;
       --success: #4ade80;
       --radius: 14px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -221,15 +218,8 @@
       color: var(--muted);
     }
 
-    .pill-debian {
-      border-color: var(--success);
-      color: var(--success);
-    }
-
-    .pill-lab {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
+    .pill-debian { border-color: var(--success); color: var(--success); }
+    .pill-lab { border-color: var(--accent); color: var(--accent); }
 
     .link-btn {
       text-decoration: none;
@@ -250,37 +240,6 @@
       margin-top: 10px;
       font-size: 0.85rem;
       color: var(--muted);
-    }
-
-    /* Secciones de detalle */
-    .detail-section {
-      margin-top: 26px;
-      padding-top: 18px;
-      border-top: 1px solid var(--border);
-      font-size: 0.9rem;
-    }
-
-    .detail-title {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .detail-sub {
-      color: var(--muted);
-      margin-bottom: 10px;
-    }
-
-    .detail-code {
-      background: #020617;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      padding: 10px 12px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-        "Liberation Mono", "Courier New", monospace;
-      font-size: 0.8rem;
-      overflow-x: auto;
-      white-space: pre;
     }
 
     footer {
@@ -347,64 +306,6 @@
         No hay resultados para ese filtro. Prueba otra palabra clave.
       </div>
 
-      <!-- Secciones de detalle para "Ver detalles" -->
-      <div id="details">
-        <section id="debian-sources" class="detail-section">
-          <div class="detail-title">Debian 13 · sources.list para srv-debian</div>
-          <p class="detail-sub">
-            Configuración completa recomendada para <code>/etc/apt/sources.list</code> en Debian 13 (Trixie).
-          </p>
-          <div class="detail-code">
-# Repos principales
-deb https://deb.debian.org/debian trixie main contrib non-free non-free-firmware
-deb-src https://deb.debian.org/debian trixie main contrib non-free non-free-firmware
-
-# Seguridad
-deb https://security.debian.org/debian-security trixie-security main contrib non-free non-free-firmware
-deb-src https://security.debian.org/debian-security trixie-security main contrib non-free non-free-firmware
-
-# Actualizaciones
-deb https://deb.debian.org/debian trixie-updates main contrib non-free non-free-firmware
-deb-src https://deb.debian.org/debian trixie-updates main contrib non-free non-free-firmware
-
-# Backports
-deb https://deb.debian.org/debian trixie-backports main contrib non-free non-free-firmware
-deb-src https://deb.debian.org/debian trixie-backports main contrib non-free non-free-firmware
-          </div>
-        </section>
-
-        <section id="lab-001-dns" class="detail-section">
-          <div class="detail-title">Lab 001 · Fix DNS en Debian 13</div>
-          <p class="detail-sub">
-            Resolución del error <code>Fallo temporal al resolver «deb.debian.org»</code> creando
-            <code>/etc/resolv.conf</code> con servidores DNS públicos.
-          </p>
-          <p><b>Remediación aplicada:</b></p>
-          <div class="detail-code">
-sudo sh -c 'cat > /etc/resolv.conf << "EOF"
-nameserver 1.1.1.1
-nameserver 8.8.8.8
-EOF'
-          </div>
-          <p><b>Verificación:</b></p>
-          <div class="detail-code">
-ping -c 4 debian.org
-sudo apt update
-          </div>
-        </section>
-
-        <section id="arch-configs" class="detail-section">
-          <div class="detail-title">Configs base para Arch / CachyOS</div>
-          <p class="detail-sub">
-            Espacio reservado para documentar configuración de tu entorno Arch/CachyOS: dotfiles,
-            terminal, zsh, powerlevel10k, herramientas de hacking, etc.
-          </p>
-          <p style="color: var(--muted);">
-            Próximamente: lista de paquetes base, alias útiles, configuración de terminal y notas de rendimiento.
-          </p>
-        </section>
-      </div>
-
       <footer>
         Página estática servida desde GitHub Pages · Actualiza este índice desde
         <code>AngheloBR.github.io</code>.
@@ -413,7 +314,7 @@ sudo apt update
   </div>
 
   <script>
-    // Aquí defines tus recursos. Ve agregando más objetos al array.
+    // Cada recurso apunta a OTRA página HTML
     const resources = [
       {
         id: "debian-sources",
@@ -422,7 +323,7 @@ sudo apt update
         description:
           "Configuración recomendada de /etc/apt/sources.list para Debian 13 (Trixie), incluyendo main, contrib, non-free, non-free-firmware y backports.",
         tags: ["debian", "repos", "apt", "trixie", "server"],
-        url: "#debian-sources",
+        url: "debian-13-sources.html",
         badge: "debian",
       },
       {
@@ -432,7 +333,7 @@ sudo apt update
         description:
           "Resolución del error 'Fallo temporal al resolver deb.debian.org' creando /etc/resolv.conf con servidores DNS públicos.",
         tags: ["debian", "lab", "dns", "networking"],
-        url: "#lab-001-dns",
+        url: "lab-001-dns.html",
         badge: "lab",
       },
       {
@@ -442,7 +343,7 @@ sudo apt update
         description:
           "Espacio reservado para documentar configuración de CachyOS/Arch: dotfiles, terminal, zsh, powerlevel10k, etc.",
         tags: ["arch", "cachyos", "desktop", "linux"],
-        url: "#arch-configs",
+        url: "arch-configs.html",
         badge: "arch",
       },
     ];
@@ -527,7 +428,6 @@ sudo apt update
       }
     }
 
-    // Eventos de búsqueda y chips
     const searchInput = document.getElementById("searchBox");
     const chips = document.querySelectorAll(".chip");
     let currentChip = "all";
@@ -545,7 +445,6 @@ sudo apt update
       });
     });
 
-    // Estado inicial
     chips[0].classList.add("active");
     renderCards();
   </script>
