@@ -222,9 +222,9 @@
 
     .card-meta {
       display: flex;
-      flex-direction: column;   /* ahora vertical */
+      flex-direction: column;
       align-items: flex-start;
-      gap: 8px;
+      gap: 10px;                 /* un poco más de espacio tags/botón */
       margin-top: 8px;
       font-size: 0.78rem;
       color: var(--muted);
@@ -232,15 +232,15 @@
 
     .card-tags {
       display: flex;
-      flex-wrap: nowrap;        /* una sola línea */
+      flex-wrap: nowrap;         /* una sola línea */
       gap: 6px;
-      overflow-x: auto;         /* si no entra, scroll horizontal */
+      overflow-x: auto;          /* scroll horizontal si no entra */
       padding-bottom: 2px;
-      scrollbar-width: none;    /* Firefox: sin barra */
+      scrollbar-width: none;     /* Firefox: sin barra visible */
     }
 
     .card-tags::-webkit-scrollbar {
-      display: none;            /* Chrome/Edge: sin barra */
+      display: none;             /* Chrome/Edge: sin barra visible */
     }
 
     .tag {
@@ -263,9 +263,11 @@
     }
 
     .link-btn {
-      align-self: flex-start;   /* debajo de los tags, a la izquierda */
+      align-self: stretch;        /* ocupa todo el ancho del meta */
+      display: flex;
+      justify-content: center;    /* texto centrado */
       text-decoration: none;
-      padding: 4px 9px;
+      padding: 6px 10px;
       border-radius: 999px;
       border: 1px solid rgba(148, 163, 184, 0.4);
       color: var(--accent);
