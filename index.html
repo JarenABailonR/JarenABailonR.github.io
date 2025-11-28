@@ -222,17 +222,25 @@
 
     .card-meta {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 4px;
+      flex-direction: column;   /* ahora vertical */
+      align-items: flex-start;
+      gap: 8px;
+      margin-top: 8px;
       font-size: 0.78rem;
       color: var(--muted);
     }
 
     .card-tags {
       display: flex;
+      flex-wrap: nowrap;        /* una sola línea */
       gap: 6px;
-      flex-wrap: wrap;
+      overflow-x: auto;         /* si no entra, scroll horizontal */
+      padding-bottom: 2px;
+      scrollbar-width: none;    /* Firefox: sin barra */
+    }
+
+    .card-tags::-webkit-scrollbar {
+      display: none;            /* Chrome/Edge: sin barra */
     }
 
     .tag {
@@ -241,6 +249,7 @@
       border: 1px solid var(--border);
       font-size: 0.72rem;
       color: var(--muted);
+      white-space: nowrap;
     }
 
     .pill-debian {
@@ -254,6 +263,7 @@
     }
 
     .link-btn {
+      align-self: flex-start;   /* debajo de los tags, a la izquierda */
       text-decoration: none;
       padding: 4px 9px;
       border-radius: 999px;
