@@ -8,21 +8,17 @@
 
   <style>
     :root {
-      /* Fondo casi negro */
       --bg: #02040a;
       --bg-alt: #050813;
       --bg-card: #050816;
 
-      /* Debian pink / magenta */
       --accent: #f973a6;
       --accent-strong: #fb2576;
 
-      /* Texto / bordes */
       --text: #e5e7eb;
       --muted: #9ca3af;
       --border: #1f2937;
 
-      /* Verde para cosas Debian / OK */
       --success: #4ade80;
 
       --radius: 14px;
@@ -38,9 +34,7 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
         sans-serif;
       color: var(--text);
-
       background-color: var(--bg);
-
       background-image:
         radial-gradient(circle at 10% 0%, rgba(249, 115, 165, 0.24) 0, transparent 55%),
         radial-gradient(circle at 90% 0%, rgba(251, 37, 118, 0.20) 0, transparent 60%),
@@ -310,7 +304,7 @@
       background: radial-gradient(circle at top left, #1e293b, #020617);
       border-radius: 18px;
       border: 1px solid rgba(148, 163, 184, 0.25);
-      padding: 16px 20px 14px;   /* un poco más compacto */
+      padding: 14px 20px 12px;
       margin-bottom: 10px;
       box-shadow: 0 18px 45px rgba(15, 23, 42, 0.75);
     }
@@ -329,16 +323,26 @@
       margin: 0;
     }
 
+    /* toda la info del server en una sola línea flexible */
     .mc-status-subtitle {
-      margin: 0;
+      margin: 2px 0 0;
       font-size: 0.85rem;
       color: #9ca3af;
-      line-height: 1.2; /* MÁS CERRADO */
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .mc-status-subtitle code {
+      font-family: inherit;
+      font-size: 0.85em;
+      color: #e5e7eb;
     }
 
     .mc-sep {
       opacity: 0.6;
-      padding: 0 6px;
+      padding: 0 4px;
     }
 
     .mc-status-pill {
@@ -366,23 +370,6 @@
       background: rgba(239, 68, 68, 0.16);
       color: #f97373;
       border-color: rgba(248, 113, 113, 0.7);
-    }
-
-    .mc-status-body {
-      margin-top: 2px; /* antes 10px: pegamos más el texto de estado */
-    }
-
-    .mc-status-text {
-      margin: 0;
-      font-size: 0.9rem;
-      color: #e5e7eb;
-      line-height: 1.25;
-    }
-
-    .mc-status-players {
-      margin: 2px 0 0;
-      font-size: 0.85rem;
-      color: #9ca3af;
     }
 
     /* Responsive */
@@ -458,19 +445,16 @@
               Versión 1.21.x
               <span class="mc-sep">|</span>
               Slots 20
+              <span class="mc-sep">|</span>
+              <span id="mc-status-text-inline">Chequeando estado…</span>
+              <span class="mc-sep" id="mc-status-sep-players" style="display:none;">|</span>
+              <span id="mc-status-players-inline"></span>
             </p>
           </div>
           <span id="mc-status-pill" class="mc-status-pill mc-status-loading">
             Chequeando…
           </span>
         </header>
-
-        <div class="mc-status-body">
-          <p id="mc-status-text" class="mc-status-text">
-            Consultando el estado del servidor…
-          </p>
-          <p id="mc-status-players" class="mc-status-players"></p>
-        </div>
       </section>
 
       <div class="section-title">
@@ -517,8 +501,9 @@
       const url = `https://api.mcsrvstat.us/2/${SERVER}`;
 
       const pill = document.getElementById("mc-status-pill");
-      const text = document.getElementById("mc-status-text");
-      const players = document.getElementById("mc-status-players");
+      const textInline = document.getElementById("mc-status-text-inline");
+      const playersInline = document.getElementById("mc-status-players-inline");
+      const sepPlayers = document.getElementById("mc-status-sep-players");
 
       try {
         const res = await fetch(url);
@@ -532,23 +517,31 @@
           const online = (data.players && data.players.online) ?? 0;
           const max = (data.players && data.players.max) ?? "?";
 
-          text.textContent = "El servidor está en línea y aceptando conexiones.";
-          players.textContent = `Jugadores conectados: ${online} / ${max}`;
+          textInline.textContent = "El servidor está en línea y aceptando conexiones.";
+          if (data.players) {
+            playersInline.textContent = `Jugadores conectados: ${online} / ${max}`;
+            sepPlayers.style.display = "inline";
+          } else {
+            playersInline.textContent = "";
+            sepPlayers.style.display = "none";
+          }
         } else {
           pill.textContent = "OFFLINE";
           pill.classList.remove("mc-status-loading", "mc-status-online");
           pill.classList.add("mc-status-offline");
 
-          text.textContent = "El servidor aparece como desconectado o no accesible.";
-          players.textContent = "";
+          textInline.textContent = "El servidor aparece como desconectado o no accesible.";
+          playersInline.textContent = "";
+          sepPlayers.style.display = "none";
         }
       } catch (err) {
         pill.textContent = "ERROR";
         pill.classList.remove("mc-status-loading", "mc-status-online");
         pill.classList.add("mc-status-offline");
 
-        text.textContent = "No se pudo consultar el estado del servidor.";
-        players.textContent = "";
+        textInline.textContent = "No se pudo consultar el estado del servidor.";
+        playersInline.textContent = "";
+        sepPlayers.style.display = "none";
         console.error("Error consultando estado Minecraft:", err);
       }
     }
