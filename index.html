@@ -39,10 +39,8 @@
         sans-serif;
       color: var(--text);
 
-      /* Capa base negro */
       background-color: var(--bg);
 
-      /* Capas de “gas” rosado tipo spray Debian */
       background-image:
         radial-gradient(circle at 10% 0%, rgba(249, 115, 165, 0.24) 0, transparent 55%),
         radial-gradient(circle at 90% 0%, rgba(251, 37, 118, 0.20) 0, transparent 60%),
@@ -172,7 +170,7 @@
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr)); /* 3 columnas en desktop */
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 14px;
       margin-top: 4px;
     }
@@ -305,6 +303,80 @@
       text-align: right;
     }
 
+    /* ---------- Tarjeta estado Minecraft ---------- */
+
+    .mc-status-card {
+      background: radial-gradient(circle at top left, #1e293b, #020617);
+      border-radius: 18px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      padding: 18px 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.75);
+    }
+
+    .mc-status-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mc-status-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e5e7eb;
+      margin: 0;
+    }
+
+    .mc-status-subtitle {
+      margin: 0;
+      font-size: 0.85rem;
+      color: #9ca3af;
+    }
+
+    .mc-status-pill {
+      font-size: 0.8rem;
+      font-weight: 600;
+      border-radius: 999px;
+      padding: 6px 12px;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .mc-status-loading {
+      background: rgba(148, 163, 184, 0.1);
+      color: #e5e7eb;
+      border-color: rgba(148, 163, 184, 0.4);
+    }
+
+    .mc-status-online {
+      background: rgba(22, 163, 74, 0.16);
+      color: #4ade80;
+      border-color: rgba(34, 197, 94, 0.7);
+    }
+
+    .mc-status-offline {
+      background: rgba(239, 68, 68, 0.16);
+      color: #f97373;
+      border-color: rgba(248, 113, 113, 0.7);
+    }
+
+    .mc-status-body {
+      margin-top: 10px;
+    }
+
+    .mc-status-text {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #e5e7eb;
+    }
+
+    .mc-status-players {
+      margin: 4px 0 0;
+      font-size: 0.85rem;
+      color: #9ca3af;
+    }
+
     /* Responsive */
     @media (max-width: 900px) {
       .page {
@@ -320,6 +392,11 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 8px;
+      }
+
+      .mc-status-header {
+        flex-direction: column;
+        align-items: flex-start;
       }
     }
 
@@ -361,6 +438,29 @@
     </header>
 
     <main>
+
+      <!-- Tarjeta estado servidor Minecraft -->
+      <section class="card mc-status-card">
+        <header class="mc-status-header">
+          <div>
+            <h2 class="mc-status-title">NyxArch · Minecraft Server</h2>
+            <p class="mc-status-subtitle">
+              IP: <code>nyxarch.duckdns.org</code> · Versión 1.21.x · Slots 20
+            </p>
+          </div>
+          <span id="mc-status-pill" class="mc-status-pill mc-status-loading">
+            Chequeando…
+          </span>
+        </header>
+
+        <div class="mc-status-body">
+          <p id="mc-status-text" class="mc-status-text">
+            Consultando el estado del servidor…
+          </p>
+          <p id="mc-status-players" class="mc-status-players"></p>
+        </div>
+      </section>
+
       <div class="section-title">
         <h2>Índice de recursos</h2>
       </div>
@@ -398,6 +498,53 @@
     </main>
   </div>
 
+  <!-- Script estado Minecraft -->
+  <script>
+    async function loadMinecraftStatus() {
+      const SERVER = "nyxarch.duckdns.org";
+      const url = `https://api.mcsrvstat.us/2/${SERVER}`;
+
+      const pill = document.getElementById("mc-status-pill");
+      const text = document.getElementById("mc-status-text");
+      const players = document.getElementById("mc-status-players");
+
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+
+        if (data.online) {
+          pill.textContent = "ONLINE";
+          pill.classList.remove("mc-status-loading", "mc-status-offline");
+          pill.classList.add("mc-status-online");
+
+          const online = (data.players && data.players.online) ?? 0;
+          const max = (data.players && data.players.max) ?? "?";
+
+          text.textContent = "El servidor está en línea y aceptando conexiones.";
+          players.textContent = `Jugadores conectados: ${online} / ${max}`;
+        } else {
+          pill.textContent = "OFFLINE";
+          pill.classList.remove("mc-status-loading", "mc-status-online");
+          pill.classList.add("mc-status-offline");
+
+          text.textContent = "El servidor aparece como desconectado o no accesible.";
+          players.textContent = "";
+        }
+      } catch (err) {
+        pill.textContent = "ERROR";
+        pill.classList.remove("mc-status-loading", "mc-status-online");
+        pill.classList.add("mc-status-offline");
+
+        text.textContent = "No se pudo consultar el estado del servidor.";
+        players.textContent = "";
+        console.error("Error consultando estado Minecraft:", err);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadMinecraftStatus);
+  </script>
+
+  <!-- Script de cards / buscador -->
   <script>
     const resources = [
       {
@@ -430,9 +577,6 @@
         url: "arch-configs.html",
         badge: "arch",
       },
-
-      /* -------- NUEVAS CARDS -------- */
-
       {
         id: "lab-002-vpn",
         title: "Lab 002 · VPN PC → VPS con WireGuard",
