@@ -1,182 +1,58 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Debian 13 · /etc/apt/sources.list para srv-debian</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-
-  <style>
-    :root {
-      /* Fondo casi negro */
-      --bg: #02040a;
-      --bg-card: #050816;
-
-      /* Debian pink / magenta */
-      --accent: #f973a6;
-      --accent-strong: #fb2576;
-
-      /* Texto / bordes */
-      --text: #e5e7eb;
-      --muted: #9ca3af;
-      --border: #1f2937;
-
-      /* Verde para cosas Debian / OK */
-      --success: #4ade80;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
-      color: var(--text);
-
-      /* Mismo efecto “gas Debian” que el index */
-      background-color: var(--bg);
-      background-image:
-        radial-gradient(circle at 10% 0%, rgba(249, 115, 165, 0.24) 0, transparent 55%),
-        radial-gradient(circle at 90% 0%, rgba(251, 37, 118, 0.20) 0, transparent 60%),
-        radial-gradient(circle at 50% 80%, rgba(148, 27, 90, 0.25) 0, transparent 60%);
-      background-attachment: fixed;
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
-
-    .page {
-      width: min(900px, 100% - 32px);
-      margin: 0 auto;
-      padding: 16px 16px 32px;
-    }
-
-    .back {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.8rem;
-      color: var(--muted);
-      text-decoration: none;
-      margin-bottom: 12px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(148, 163, 184, 0.45);
-    }
-
-    .back span:first-child {
-      font-size: 0.9rem;
-    }
-
-    .back:hover {
-      color: var(--accent-strong);
-      border-color: var(--accent-strong);
-    }
-
-    .card {
-      background: rgba(5, 8, 19, 0.96);
-      border-radius: 18px;
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      padding: 18px 20px 22px;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
-    }
-
-    h1 {
-      margin: 0 0 8px;
-      font-size: 1.35rem;
-    }
-
-    h2 {
-      margin: 18px 0 10px;
-      font-size: 1rem;
-      color: var(--text);
-    }
-
-    .subtitle {
-      margin: 0 0 12px;
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-
-    .note {
-      margin-top: 14px;
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-
-    code {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-        "Liberation Mono", "Courier New", monospace;
-      font-size: 0.8rem;
-    }
-
-    /* Inline code (dentro de texto) */
-    p > code,
-    h1 > code,
-    h2 > code {
-      background: rgba(15, 23, 42, 0.9);
-      border-radius: 4px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      padding: 1px 5px;
-      color: var(--accent);
-    }
-
-    pre {
-      margin: 0;
-      margin-top: 8px;
-      background: #020617;
-      border-radius: 12px;
-      border: 1px solid #111827;
-      padding: 10px 12px;
-      overflow-x: auto;
-      font-size: 0.78rem;
-      line-height: 1.45;
-      color: var(--text);
-    }
-
-    pre code {
-      background: transparent;
-      border: none;
-      padding: 0;
-      color: var(--success); /* opcional: verde Debian para el bloque */
-    }
-
-    @media (max-width: 600px) {
-      .page {
-        width: 100%;
-        padding: 12px 10px 24px;
-      }
-
-      .card {
-        padding: 16px 12px 18px;
-        border-radius: 14px;
-      }
-
-      h1 {
-        font-size: 1.15rem;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debian 13 · sources.list</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { mono: ['"JetBrains Mono"', 'monospace'] },
+                    colors: { bg: '#0a0b10', card: '#11131a', accent: '#ff2a6d', dim: '#718096', success: '#4ade80' }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0a0b10;
+            background-image: linear-gradient(rgba(17, 19, 26, 0.7) 1px, transparent 1px), linear-gradient(90deg, rgba(17, 19, 26, 0.7) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        pre { background-color: #050505; border: 1px solid #1f2937; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; color: #e2e8f0; }
+        :not(pre) > code { background-color: rgba(74, 222, 128, 0.1); color: #4ade80; padding: 0.2em 0.4em; border-radius: 0.3em; font-size: 0.85em; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0b10; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff2a6d; }
+    </style>
 </head>
+<body class="text-gray-300 font-mono antialiased min-h-screen flex flex-col p-4 md:p-8">
 
-<body>
-  <div class="page">
-    <a href="./" class="back"><span>←</span><span>Volver al índice</span></a>
+    <div class="max-w-4xl mx-auto w-full">
+        <div class="mb-8">
+            <a href="index.html" class="inline-flex items-center text-dim hover:text-accent transition-colors duration-200 text-sm mb-4">
+                <i class="fas fa-arrow-left mr-2"></i> Volver al índice
+            </a>
+            <h1 class="text-3xl md:text-4xl font-bold text-white tracking-tight border-b border-gray-800 pb-4">
+                <span class="text-success">Debian 13</span> · sources.list
+            </h1>
+            <p class="mt-4 text-gray-400 text-lg">
+                Configuración base recomendada para un servidor Debian 13 (Trixie), incluyendo repos principales, seguridad y backports.
+            </p>
+        </div>
 
-    <div class="card">
-      <h1>Debian 13 · <code>/etc/apt/sources.list</code> para srv-debian</h1>
-
-      <p class="subtitle">
-        Configuración base recomendada para un servidor Debian 13 (Trixie),
-        incluyendo repos principales, seguridad, actualizaciones y backports.
-      </p>
-
-      <h2>Contenido sugerido de <code>/etc/apt/sources.list</code></h2>
-
-      <pre><code># Repos principales
+        <article class="bg-card border border-gray-800 rounded-xl p-6 md:p-10 shadow-xl space-y-8">
+            <section>
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fas fa-file-code text-accent"></i> /etc/apt/sources.list
+                </h2>
+                <pre><code># Repos principales
 deb https://deb.debian.org/debian trixie main contrib non-free non-free-firmware
 deb-src https://deb.debian.org/debian trixie main contrib non-free non-free-firmware
 
@@ -190,15 +66,18 @@ deb-src https://deb.debian.org/debian trixie-updates main contrib non-free non-f
 
 # Backports
 deb https://deb.debian.org/debian trixie-backports main contrib non-free non-free-firmware
-deb-src https://deb.debian.org/debian trixie-backports main contrib non-free non-free-firmware
-      </code></pre>
+deb-src https://deb.debian.org/debian trixie-backports main contrib non-free non-free-firmware</code></pre>
+            </section>
 
-      <p class="note">
-        Después de actualizar este archivo, ejecuta:
-        <code>sudo apt update</code> para refrescar los índices y
-        <code>sudo apt upgrade</code> para aplicar actualizaciones.
-      </p>
+            <div class="bg-blue-900/10 border border-blue-900/30 rounded-lg p-4 flex gap-3">
+                <i class="fas fa-info-circle text-blue-400 mt-1"></i>
+                <div class="text-sm text-blue-200">
+                    <p class="mb-2">Después de actualizar este archivo, ejecuta:</p>
+                    <code class="text-blue-300 bg-blue-900/20">sudo apt update</code> para refrescar los índices y 
+                    <code class="text-blue-300 bg-blue-900/20">sudo apt upgrade</code> para aplicar actualizaciones.
+                </div>
+            </div>
+        </article>
     </div>
-  </div>
 </body>
 </html>
