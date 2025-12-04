@@ -1,734 +1,389 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Anghelo BR • Labs & Repos</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-
-  <style>
-    :root {
-      --bg: #02040a;
-      --bg-alt: #050813;
-      --bg-card: #050816;
-
-      --accent: #f973a6;
-      --accent-strong: #fb2576;
-
-      --text: #e5e7eb;
-      --muted: #9ca3af;
-      --border: #1f2937;
-
-      --success: #4ade80;
-
-      --radius: 14px;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
-      color: var(--text);
-      background-color: var(--bg);
-      background-image:
-        radial-gradient(circle at 10% 0%, rgba(249, 115, 165, 0.24) 0, transparent 55%),
-        radial-gradient(circle at 90% 0%, rgba(251, 37, 118, 0.20) 0, transparent 60%),
-        radial-gradient(circle at 50% 80%, rgba(148, 27, 90, 0.25) 0, transparent 60%);
-      background-attachment: fixed;
-      background-repeat: no-repeat;
-      background-size: cover;
-    }
-
-    .page {
-      width: min(1200px, 100% - 32px);
-      margin: 0 auto;
-      padding: 16px 16px 32px;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .title-block h1 {
-      margin: 0;
-      font-size: 1.8rem;
-    }
-
-    .title-block p {
-      margin: 4px 0 0;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    .tag-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: rgba(251, 37, 118, 0.10);
-      border: 1px solid rgba(251, 37, 118, 0.6);
-      font-size: 0.8rem;
-      color: var(--accent-strong);
-      white-space: nowrap;
-    }
-
-    main {
-      background: rgba(5, 8, 19, 0.96);
-      border-radius: 18px;
-      border: 1px solid rgba(148, 163, 184, 0.22);
-      padding: 18px 20px 24px;
-      backdrop-filter: blur(18px);
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
-    }
-
-    .section-title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 4px;
-      margin-bottom: 10px;
-    }
-
-    .section-title h2 {
-      margin: 0;
-      font-size: 1.1rem;
-    }
-
-    .section-sub {
-      margin: 0 0 16px;
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-
-    .search-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 18px;
-    }
-
-    .search-input {
-      flex: 1 1 220px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: #020617;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      padding: 6px 12px;
-    }
-
-    .search-input input {
-      flex: 1;
-      border: none;
-      outline: none;
-      background: transparent;
-      color: var(--text);
-      font-size: 0.9rem;
-    }
-
-    .search-input input::placeholder {
-      color: var(--muted);
-    }
-
-    .chip-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      font-size: 0.78rem;
-    }
-
-    .chip {
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: #020617;
-      color: var(--muted);
-      cursor: pointer;
-    }
-
-    .chip.active {
-      border-color: var(--accent-strong);
-      color: var(--accent-strong);
-      background: rgba(249, 115, 165, 0.12);
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 4px;
-    }
-
-    @media (max-width: 1100px) {
-      .grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 700px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .card {
-      background: var(--bg-card);
-      border-radius: var(--radius);
-      border: 1px solid rgba(15, 23, 42, 0.9);
-      padding: 14px 14px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      transition: transform 0.12s ease, box-shadow 0.12s ease,
-        border-color 0.12s ease, background 0.12s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-2px);
-      border-color: rgba(249, 115, 165, 0.8);
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.9);
-      background: #03050d;
-    }
-
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 8px;
-    }
-
-    .card-title {
-      font-size: 0.95rem;
-      font-weight: 600;
-    }
-
-    .card-type {
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-    }
-
-    .card-desc {
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-
-    .card-meta {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-      margin-top: 8px;
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-
-    .card-tags {
-      display: flex;
-      flex-wrap: nowrap;
-      gap: 6px;
-      overflow-x: auto;
-      padding-bottom: 2px;
-      scrollbar-width: none;
-    }
-
-    .card-tags::-webkit-scrollbar {
-      display: none;
-    }
-
-    .tag {
-      padding: 2px 8px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      font-size: 0.72rem;
-      color: var(--muted);
-      white-space: nowrap;
-    }
-
-    .pill-debian {
-      border-color: var(--success);
-      color: var(--success);
-    }
-
-    .pill-lab {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    .link-btn {
-      align-self: stretch;
-      display: flex;
-      justify-content: center;
-      text-decoration: none;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      color: var(--accent);
-      font-size: 0.78rem;
-      background: rgba(15, 23, 42, 0.8);
-    }
-
-    .link-btn:hover {
-      border-color: var(--accent);
-      background: rgba(249, 115, 165, 0.08);
-    }
-
-    .empty {
-      margin-top: 10px;
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-
-    footer {
-      margin-top: 18px;
-      font-size: 0.75rem;
-      color: var(--muted);
-      text-align: right;
-    }
-
-    /* ---------- Tarjeta estado Minecraft ---------- */
-
-    .mc-status-card {
-      background: radial-gradient(circle at top left, #1e293b, #020617);
-      border-radius: 18px;
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      padding: 12px 20px 10px;
-      margin-bottom: 10px;
-      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.75);
-    }
-
-    .mc-status-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .mc-status-title {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #e5e7eb;
-      margin: 0;
-    }
-
-    /* Fila de info en una sola línea (desktop) */
-    .mc-status-subtitle {
-      margin: 2px 0 0;
-      font-size: 0.85rem;
-      color: #9ca3af;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 4px 10px;
-    }
-
-    .mc-status-subtitle code {
-      font-family: inherit;
-      font-size: 0.85em;
-      color: #e5e7eb;
-    }
-
-    .mc-chunk {
-      position: relative;
-    }
-
-    /* Separadores automáticos entre bloques, solo desktop */
-    .mc-chunk + .mc-chunk::before {
-      content: "|";
-      opacity: 0.6;
-      margin-right: 8px;
-    }
-
-    .mc-status-pill {
-      font-size: 0.8rem;
-      font-weight: 600;
-      border-radius: 999px;
-      padding: 6px 12px;
-      border: 1px solid transparent;
-      white-space: nowrap;
-    }
-
-    .mc-status-loading {
-      background: rgba(148, 163, 184, 0.1);
-      color: #e5e7eb;
-      border-color: rgba(148, 163, 184, 0.4);
-    }
-
-    .mc-status-online {
-      background: rgba(22, 163, 74, 0.16);
-      color: #4ade80;
-      border-color: rgba(34, 197, 94, 0.7);
-    }
-
-    .mc-status-offline {
-      background: rgba(239, 68, 68, 0.16);
-      color: #f97373;
-      border-color: rgba(248, 113, 113, 0.7);
-    }
-
-    /* Responsive */
-    @media (max-width: 900px) {
-      .page {
-        width: min(100%, 100% - 16px);
-        padding: 12px 8px 20px;
-      }
-
-      main {
-        padding: 16px 14px 20px;
-      }
-
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-      }
-
-      .mc-status-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .page {
-        width: 100%;
-        padding: 8px;
-      }
-
-      main {
-        border-radius: 0;
-        border-left: none;
-        border-right: none;
-      }
-
-      .grid {
-        grid-template-columns: 1fr;
-      }
-
-      .card {
-        padding: 12px 10px 10px;
-      }
-
-      /* En móvil, apilar la info y quitar los separadores | */
-      .mc-status-subtitle {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 2px;
-      }
-
-      .mc-chunk + .mc-chunk::before {
-        content: none;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anghelo BR • Labs & Repos</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Fuente Monoespaciada estilo Terminal -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        bg: '#0a0b10',
+                        card: '#11131a',
+                        accent: '#ff2a6d', // Rosa neón
+                        accent2: '#05d9e8', // Cyan neón
+                        dim: '#718096',
+                        success: '#4ade80',
+                        warning: '#facc15',
+                        danger: '#f87171'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0a0b10;
+            background-image: 
+                linear-gradient(rgba(17, 19, 26, 0.7) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(17, 19, 26, 0.7) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Scrollbar personalizado */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0b10; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff2a6d; }
+
+        /* Animación de pulso para estado */
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(74, 222, 128, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+        }
+        .status-dot-online { animation: pulse-glow 2s infinite; background-color: #4ade80; }
+        .status-dot-offline { background-color: #f87171; }
+
+        /* Efecto Glow en tarjetas */
+        .tech-card {
+            transition: all 0.3s ease;
+            border: 1px solid #2d3748;
+        }
+        .tech-card:hover {
+            transform: translateY(-4px);
+            border-color: #ff2a6d;
+            box-shadow: 0 4px 20px -5px rgba(255, 42, 109, 0.2);
+        }
+
+        /* Chips activos */
+        .filter-chip.active {
+            background-color: #ff2a6d;
+            color: #fff;
+            border-color: #ff2a6d;
+        }
+    </style>
 </head>
+<body class="text-gray-300 font-mono antialiased min-h-screen flex flex-col">
 
-<body>
-  <div class="page">
-    <header>
-      <div class="title-block">
-        <h1>Anghelo BR • Labs &amp; Repos</h1>
-        <p>
-          Networks &amp; Information Security student · Linux-first · Cybersecurity &amp; homelabs.
-        </p>
-      </div>
-      <div class="tag-pill">
-        <span>🚀</span><span>Debian · Arch · Hacking labs</span>
-      </div>
+    <!-- Navbar / Header -->
+    <header class="w-full border-b border-gray-800 bg-bg/95 backdrop-blur-sm sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-2xl font-bold text-white tracking-tighter">
+                    Anghelo BR <span class="text-accent">•</span> Labs & Repos
+                </h1>
+                <p class="text-xs text-dim mt-1">
+                    > Networks & Sec Student <span class="mx-1">|</span> Linux-first <span class="mx-1">|</span> Cybersecurity
+                </p>
+            </div>
+            <div class="flex gap-3 text-xs">
+                <div class="px-3 py-1 border border-gray-700 rounded hover:border-accent hover:text-accent transition flex items-center gap-2 cursor-default">
+                    <i class="fas fa-rocket"></i> Debian
+                </div>
+                <div class="px-3 py-1 border border-gray-700 rounded hover:border-accent2 hover:text-accent2 transition flex items-center gap-2 cursor-default">
+                    <i class="fas fa-terminal"></i> Arch
+                </div>
+                <div class="px-3 py-1 border border-gray-700 rounded hover:text-white bg-red-900/20 border-red-900/50 flex items-center gap-2 cursor-default">
+                    <i class="fas fa-skull"></i> Hacking Labs
+                </div>
+            </div>
+        </div>
     </header>
 
-    <main>
+    <main class="flex-grow max-w-6xl mx-auto px-4 py-8 w-full space-y-8">
 
-      <!-- Tarjeta estado servidor Minecraft -->
-      <section class="card mc-status-card">
-        <header class="mc-status-header">
-          <div>
-            <h2 class="mc-status-title">NyxArch · Minecraft Server</h2>
-            <p class="mc-status-subtitle">
-              <span class="mc-chunk">
-                IP: <code>nyxarch.duckdns.org</code>
-              </span>
-              <span class="mc-chunk">
-                Versión 1.21.x
-              </span>
-              <span class="mc-chunk">
-                Slots 20
-              </span>
-              <span class="mc-chunk" id="mc-status-text-inline">
-                Chequeando estado…
-              </span>
-              <span class="mc-chunk" id="mc-status-players-inline"></span>
-            </p>
-          </div>
-          <span id="mc-status-pill" class="mc-status-pill mc-status-loading">
-            Chequeando…
-          </span>
-        </header>
-      </section>
+        <!-- Server Status Widget (Dinámico) -->
+        <div class="w-full bg-card border border-gray-800 rounded-lg p-4 md:p-6 flex flex-col md:flex-row justify-between items-center gap-4 relative overflow-hidden group">
+            <!-- Barra lateral indicadora de estado -->
+            <div id="mc-status-bar" class="absolute top-0 left-0 w-1 h-full bg-gray-600 transition-colors duration-500"></div> 
+            
+            <div class="flex items-center gap-4 z-10 w-full md:w-auto">
+                <div class="p-3 bg-gray-900 rounded-full border border-gray-700">
+                    <i class="fas fa-server text-xl text-gray-400"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-white">NyxArch • Minecraft Server</h3>
+                    <p class="text-xs text-dim font-mono flex flex-col md:flex-row gap-1 md:gap-3">
+                        <span>IP: <code class="text-accent">nyxarch.duckdns.org</code></span>
+                        <span class="hidden md:inline">|</span>
+                        <span>Ver: 1.21.x</span>
+                    </p>
+                </div>
+            </div>
 
-      <div class="section-title">
-        <h2>Índice de recursos</h2>
-      </div>
-      <p class="section-sub">
-        Usa el buscador o los chips para filtrar. Ejemplos:
-        <b>debian</b>, <b>repos</b>, <b>lab</b>, <b>arch</b>.
-      </p>
-
-      <div class="search-row">
-        <div class="search-input">
-          <span>🔎</span>
-          <input
-            id="searchBox"
-            type="text"
-            placeholder="Buscar por nombre, descripción o tags..."
-          />
+            <div class="flex items-center gap-4 z-10 w-full md:w-auto justify-between md:justify-end">
+                <div class="text-right">
+                    <p class="text-xs text-dim">Estado</p>
+                    <p id="mc-status-text" class="text-sm font-bold text-gray-400">CONNECTING...</p>
+                </div>
+                <!-- Punto de estado -->
+                <div id="mc-status-dot" class="w-3 h-3 bg-gray-600 rounded-full"></div>
+                
+                <!-- Info extra de jugadores -->
+                <div id="mc-players-info" class="hidden px-3 py-1 bg-gray-900 rounded border border-gray-700 text-xs text-dim">
+                    <i class="fas fa-users mr-2"></i><span id="mc-players-count">0/0</span>
+                </div>
+            </div>
+            
+            <!-- Decoración de fondo -->
+            <div class="absolute right-0 top-0 h-full w-64 bg-gradient-to-l from-gray-800/10 to-transparent pointer-events-none"></div>
         </div>
-        <div class="chip-row">
-          <button class="chip" data-filter="all">Todo</button>
-          <button class="chip" data-filter="debian">Debian</button>
-          <button class="chip" data-filter="lab">Labs</button>
-          <button class="chip" data-filter="arch">Arch / CachyOS</button>
+
+        <!-- Buscador y Filtros -->
+        <section class="space-y-4">
+            <h2 class="text-xl font-bold text-white border-l-4 border-accent pl-3">Índice de recursos</h2>
+            
+            <div class="flex flex-col md:flex-row gap-4">
+                <div class="relative flex-grow">
+                    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                    <input type="text" id="searchBox" placeholder="Buscar por nombre, descripción o tags..." 
+                           class="w-full bg-black/30 border border-gray-700 rounded-md py-3 pl-12 pr-4 text-sm focus:border-accent focus:ring-1 focus:ring-accent outline-none text-white transition placeholder-gray-600">
+                </div>
+                <div class="flex gap-2 flex-wrap" id="chipContainer">
+                    <button class="filter-chip active px-4 py-2 rounded-md border border-gray-700 text-xs hover:border-accent transition bg-gray-900" data-filter="all">Todo</button>
+                    <button class="filter-chip px-4 py-2 rounded-md border border-gray-700 text-xs hover:border-accent transition bg-gray-900" data-filter="debian">Debian</button>
+                    <button class="filter-chip px-4 py-2 rounded-md border border-gray-700 text-xs hover:border-accent transition bg-gray-900" data-filter="lab">Labs</button>
+                    <button class="filter-chip px-4 py-2 rounded-md border border-gray-700 text-xs hover:border-accent transition bg-gray-900" data-filter="arch">Arch</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Grid de Tarjetas (Se llena con JS) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="cards-container">
+            <!-- Las tarjetas se generan aquí -->
         </div>
-      </div>
+        
+        <!-- Estado Vacío -->
+        <div id="emptyState" class="hidden text-center py-12">
+            <i class="fas fa-ghost text-4xl text-dim mb-4"></i>
+            <p class="text-dim">No se encontraron resultados para los filtros aplicados.</p>
+        </div>
 
-      <div id="cards" class="grid"></div>
-      <div id="emptyState" class="empty" style="display:none;">
-        No hay resultados para ese filtro. Prueba otra palabra clave.
-      </div>
-
-      <footer>
-        Página estática servida desde GitHub Pages · Actualiza este índice desde
-        <code>AngheloBR.github.io</code>.
-      </footer>
     </main>
-  </div>
 
-  <!-- Script estado Minecraft -->
-  <script>
-    async function loadMinecraftStatus() {
-      const SERVER = "nyxarch.duckdns.org";
-      const url = `https://api.mcsrvstat.us/2/${SERVER}`;
+    <footer class="border-t border-gray-800 bg-card py-6 mt-auto">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <p class="text-xs text-dim">
+                <i class="fab fa-github mr-1"></i> Página estática servida desde GitHub Pages • Actualiza este índice desde AngheloBR.github.io
+            </p>
+            <p class="text-[10px] text-gray-700 mt-2 font-mono">
+                System.Status: <span class="text-success">OPERATIONAL</span> • Build: v2.0.0
+            </p>
+        </div>
+    </footer>
 
-      const pill = document.getElementById("mc-status-pill");
-      const textInline = document.getElementById("mc-status-text-inline");
-      const playersInline = document.getElementById("mc-status-players-inline");
+    <!-- LOGICA JAVASCRIPT -->
+    <script>
+        // --- 1. DATOS DE RECURSOS (Tu array original) ---
+        const resources = [
+            {
+                id: "debian-sources",
+                title: "Debian 13 · sources.list",
+                type: "Repos",
+                description: "Configuración recomendada de /etc/apt/sources.list para Debian 13 (Trixie), incluyendo main, contrib, non-free, firmware y backports.",
+                tags: ["debian", "repos", "apt", "trixie", "server"],
+                url: "debian-13-sources.html",
+                badge: "debian",
+            },
+            {
+                id: "lab-001-dns",
+                title: "Lab 001 · Fix DNS Debian",
+                type: "Lab",
+                description: "Resolución del error 'Fallo temporal al resolver deb.debian.org' creando /etc/resolv.conf con servidores DNS públicos seguros.",
+                tags: ["debian", "lab", "dns", "networking"],
+                url: "lab-001-dns.html",
+                badge: "lab",
+            },
+            {
+                id: "arch-configs",
+                title: "Configs base Arch/CachyOS",
+                type: "Notas",
+                description: "Espacio reservado para documentar configuración de CachyOS/Arch: dotfiles, terminal, zsh, powerlevel10k, etc.",
+                tags: ["arch", "cachyos", "desktop", "linux"],
+                url: "arch-configs.html",
+                badge: "arch",
+            },
+            {
+                id: "lab-002-vpn",
+                title: "Lab 002 · VPN PC → VPS",
+                type: "Lab",
+                description: "Configuración de una VPN sencilla desde tu PC hacia un servidor VPS con IP pública usando WireGuard sin depender del router.",
+                tags: ["debian", "lab", "vpn", "wireguard"],
+                url: "lab-002-vpn.html",
+                badge: "lab",
+            },
+            {
+                id: "lab-003-hardening",
+                title: "Lab 003 · Hardening Debian",
+                type: "Lab",
+                description: "Checklist de hardening inicial para un servidor Debian 13: usuarios, sudo, SSH, firewall y actualizaciones automáticas.",
+                tags: ["debian", "lab", "security", "hardening"],
+                url: "lab-003-hardening.html",
+                badge: "lab",
+            },
+            {
+                id: "lab-004-nas",
+                title: "Lab 004 · NAS casero",
+                type: "Lab",
+                description: "Montaje de un NAS sencillo con Debian usando Samba para compartir archivos en tu red local y homelab.",
+                tags: ["debian", "lab", "nas", "storage", "homelab"],
+                url: "lab-004-nas.html",
+                badge: "lab",
+            }
+        ];
 
-      try {
-        const res = await fetch(url);
-        const data = await res.json();
+        // --- 2. RENDERIZADO DE TARJETAS ---
+        const container = document.getElementById("cards-container");
+        const emptyState = document.getElementById("emptyState");
 
-        if (data.online) {
-          pill.textContent = "ONLINE";
-          pill.classList.remove("mc-status-loading", "mc-status-offline");
-          pill.classList.add("mc-status-online");
+        function renderCards(filterText = "", chipFilter = "all") {
+            container.innerHTML = "";
+            const query = filterText.trim().toLowerCase();
 
-          const online = (data.players && data.players.online) ?? 0;
-          const max = (data.players && data.players.max) ?? "?";
+            const filtered = resources.filter((r) => {
+                const textMatch = !query || 
+                    r.title.toLowerCase().includes(query) || 
+                    r.description.toLowerCase().includes(query) || 
+                    r.tags.some(t => t.toLowerCase().includes(query));
+                
+                const chipMatch = chipFilter === "all" || r.tags.some(t => t === chipFilter);
+                return textMatch && chipMatch;
+            });
 
-          textInline.textContent = "El servidor está en línea y aceptando conexiones.";
-          if (data.players) {
-            playersInline.textContent = `Jugadores conectados: ${online} / ${max}`;
-          } else {
-            playersInline.textContent = "";
-          }
-        } else {
-          pill.textContent = "OFFLINE";
-          pill.classList.remove("mc-status-loading", "mc-status-online");
-          pill.classList.add("mc-status-offline");
+            if (filtered.length === 0) {
+                emptyState.classList.remove("hidden");
+                return;
+            } else {
+                emptyState.classList.add("hidden");
+            }
 
-          textInline.textContent = "El servidor aparece como desconectado o no accesible.";
-          playersInline.textContent = "";
+            filtered.forEach(r => {
+                // Crear HTML de la tarjeta
+                const card = document.createElement("article");
+                card.className = "tech-card bg-card rounded-lg p-6 flex flex-col h-full relative group cursor-pointer";
+                // Hacer toda la tarjeta clickeable
+                card.onclick = () => window.location.href = r.url;
+
+                // Tags HTML
+                const tagsHtml = r.tags.map(t => {
+                    // Estilo base para tags
+                    let style = "border-gray-700 text-gray-400";
+                    if (r.badge === 'debian' && t==='debian') style = "border-green-900/50 text-green-400 bg-green-900/10";
+                    if (r.badge === 'arch' && (t==='arch' || t==='cachyos')) style = "border-cyan-900/50 text-cyan-400 bg-cyan-900/10";
+                    if (t === 'security' || t === 'vpn') style = "border-red-900/50 text-red-400 bg-red-900/10";
+                    
+                    return `<span class="text-[10px] px-2 py-1 rounded border ${style}">${t}</span>`;
+                }).join('');
+
+                card.innerHTML = `
+                    <div class="absolute top-4 right-4 text-[10px] font-bold text-dim border border-dim/30 px-2 py-0.5 rounded uppercase tracking-wider">${r.type}</div>
+                    <h3 class="text-lg font-bold text-white mb-2 group-hover:text-accent transition">${r.title}</h3>
+                    <p class="text-sm text-dim mb-6 flex-grow leading-relaxed">${r.description}</p>
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        ${tagsHtml}
+                    </div>
+                    <div class="mt-auto pt-4 border-t border-gray-800 flex justify-between items-center">
+                        <span class="text-xs text-accent font-bold uppercase tracking-widest group-hover:underline">Ver detalles</span>
+                        <i class="fas fa-arrow-right text-xs text-dim group-hover:text-accent transition transform group-hover:translate-x-1"></i>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
         }
-      } catch (err) {
-        pill.textContent = "ERROR";
-        pill.classList.remove("mc-status-loading", "mc-status-online");
-        pill.classList.add("mc-status-offline");
 
-        textInline.textContent = "No se pudo consultar el estado del servidor.";
-        playersInline.textContent = "";
-        console.error("Error consultando estado Minecraft:", err);
-      }
-    }
+        // --- 3. LÓGICA DE BÚSQUEDA Y FILTROS ---
+        const searchInput = document.getElementById("searchBox");
+        const chips = document.querySelectorAll(".filter-chip");
+        let currentChip = "all";
 
-    document.addEventListener("DOMContentLoaded", loadMinecraftStatus);
-  </script>
-
-  <!-- Script de cards / buscador -->
-  <script>
-    const resources = [
-      {
-        id: "debian-sources",
-        title: "Debian 13 · sources.list para srv-debian",
-        type: "Repos",
-        description:
-          "Configuración recomendada de /etc/apt/sources.list para Debian 13 (Trixie), incluyendo main, contrib, non-free, non-free-firmware y backports.",
-        tags: ["debian", "repos", "apt", "trixie", "server"],
-        url: "debian-13-sources.html",
-        badge: "debian",
-      },
-      {
-        id: "lab-001-dns",
-        title: "Lab 001 · Fix DNS en Debian 13",
-        type: "Lab",
-        description:
-          "Resolución del error 'Fallo temporal al resolver deb.debian.org' creando /etc/resolv.conf con servidores DNS públicos.",
-        tags: ["debian", "lab", "dns", "networking"],
-        url: "lab-001-dns.html",
-        badge: "lab",
-      },
-      {
-        id: "arch-configs",
-        title: "Configs base para Arch / CachyOS",
-        type: "Notas",
-        description:
-          "Espacio reservado para documentar configuración de CachyOS/Arch: dotfiles, terminal, zsh, powerlevel10k, etc.",
-        tags: ["arch", "cachyos", "desktop", "linux"],
-        url: "arch-configs.html",
-        badge: "arch",
-      },
-      {
-        id: "lab-002-vpn",
-        title: "Lab 002 · VPN PC → VPS con WireGuard",
-        type: "Lab",
-        description:
-          "Configuración de una VPN sencilla desde tu PC hacia un servidor VPS con IP pública usando WireGuard, sin depender de las limitaciones del router.",
-        tags: ["debian", "lab", "vpn", "wireguard"],
-        url: "lab-002-vpn.html",
-        badge: "lab",
-      },
-      {
-        id: "lab-003-hardening",
-        title: "Lab 003 · Hardening básico en Debian 13",
-        type: "Lab",
-        description:
-          "Checklist de hardening inicial para un servidor Debian 13: usuarios, sudo, SSH, firewall y actualizaciones automáticas.",
-        tags: ["debian", "lab", "security", "hardening"],
-        url: "lab-003-hardening.html",
-        badge: "lab",
-      },
-      {
-        id: "lab-004-nas",
-        title: "Lab 004 · NAS casero con Debian",
-        type: "Lab",
-        description:
-          "Montaje de un NAS sencillo con Debian usando Samba para compartir archivos en tu red local y homelab.",
-        tags: ["debian", "lab", "nas", "storage", "homelab"],
-        url: "lab-004-nas.html",
-        badge: "lab",
-      },
-    ];
-
-    function renderCards(filterText = "", chipFilter = "all") {
-      const container = document.getElementById("cards");
-      const empty = document.getElementById("emptyState");
-      container.innerHTML = "";
-
-      const query = filterText.trim().toLowerCase();
-
-      const filtered = resources.filter((r) => {
-        const textMatch =
-          !query ||
-          r.title.toLowerCase().includes(query) ||
-          r.description.toLowerCase().includes(query) ||
-          r.tags.some((t) => t.toLowerCase().includes(query));
-
-        const chipMatch =
-          chipFilter === "all" || r.tags.some((t) => t === chipFilter);
-
-        return textMatch && chipMatch;
-      });
-
-      if (!filtered.length) {
-        empty.style.display = "block";
-        return;
-      } else {
-        empty.style.display = "none";
-      }
-
-      for (const r of filtered) {
-        const card = document.createElement("article");
-        card.className = "card";
-
-        const header = document.createElement("div");
-        header.className = "card-header";
-
-        const title = document.createElement("div");
-        title.className = "card-title";
-        title.textContent = r.title;
-
-        const type = document.createElement("div");
-        type.className = "card-type";
-        type.textContent = r.type;
-
-        header.appendChild(title);
-        header.appendChild(type);
-
-        const desc = document.createElement("p");
-        desc.className = "card-desc";
-        desc.textContent = r.description;
-
-        const meta = document.createElement("div");
-        meta.className = "card-meta";
-
-        const tags = document.createElement("div");
-        tags.className = "card-tags";
-
-        r.tags.forEach((t) => {
-          const span = document.createElement("span");
-          span.className = "tag";
-          if (r.badge === "debian") span.classList.add("pill-debian");
-          if (r.badge === "lab") span.classList.add("pill-lab");
-          span.textContent = t;
-          tags.appendChild(span);
+        searchInput.addEventListener("input", () => {
+            renderCards(searchInput.value, currentChip);
         });
 
-        const link = document.createElement("a");
-        link.className = "link-btn";
-        link.href = r.url;
-        link.textContent = "Ver detalles";
+        chips.forEach(chip => {
+            chip.addEventListener("click", () => {
+                chips.forEach(c => c.classList.remove("active"));
+                chip.classList.add("active");
+                currentChip = chip.dataset.filter;
+                renderCards(searchInput.value, currentChip);
+            });
+        });
 
-        meta.appendChild(tags);
-        meta.appendChild(link);
+        // --- 4. LÓGICA MINECRAFT SERVER ---
+        async function loadMinecraftStatus() {
+            const SERVER = "nyxarch.duckdns.org";
+            const url = `https://api.mcsrvstat.us/2/${SERVER}`;
 
-        card.appendChild(header);
-        card.appendChild(desc);
-        card.appendChild(meta);
+            // Elementos DOM
+            const statusBar = document.getElementById("mc-status-bar");
+            const statusText = document.getElementById("mc-status-text");
+            const statusDot = document.getElementById("mc-status-dot");
+            const playersInfo = document.getElementById("mc-players-info");
+            const playersCount = document.getElementById("mc-players-count");
 
-        container.appendChild(card);
-      }
-    }
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
 
-    const searchInput = document.getElementById("searchBox");
-    const chips = document.querySelectorAll(".chip");
-    let currentChip = "all";
+                if (data.online) {
+                    // ONLINE
+                    statusBar.classList.remove("bg-gray-600", "bg-red-500");
+                    statusBar.classList.add("bg-green-500");
+                    
+                    statusText.textContent = "ONLINE";
+                    statusText.classList.remove("text-gray-400", "text-red-400");
+                    statusText.classList.add("text-green-400");
+                    
+                    statusDot.classList.remove("bg-gray-600", "status-dot-offline");
+                    statusDot.classList.add("status-dot-online"); // Animación pulse
 
-    searchInput.addEventListener("input", () => {
-      renderCards(searchInput.value, currentChip);
-    });
+                    // Jugadores
+                    const online = data.players?.online || 0;
+                    const max = data.players?.max || "?";
+                    playersCount.textContent = `${online}/${max}`;
+                    playersInfo.classList.remove("hidden");
+                } else {
+                    // OFFLINE
+                    statusBar.classList.remove("bg-gray-600", "bg-green-500");
+                    statusBar.classList.add("bg-red-500");
+                    
+                    statusText.textContent = "OFFLINE";
+                    statusText.classList.remove("text-gray-400", "text-green-400");
+                    statusText.classList.add("text-red-400");
+                    
+                    statusDot.classList.remove("bg-gray-600", "status-dot-online");
+                    statusDot.classList.add("status-dot-offline"); // Rojo fijo
+                    
+                    playersInfo.classList.add("hidden");
+                }
+            } catch (err) {
+                console.error("Error fetching MC status:", err);
+                statusText.textContent = "ERROR";
+                statusBar.classList.add("bg-red-500");
+            }
+        }
 
-    chips.forEach((chip) => {
-      chip.addEventListener("click", () => {
-        chips.forEach((c) => c.classList.remove("active"));
-        chip.classList.add("active");
-        currentChip = chip.dataset.filter;
-        renderCards(searchInput.value, currentChip);
-      });
-    });
+        // --- INICIALIZACIÓN ---
+        document.addEventListener("DOMContentLoaded", () => {
+            renderCards();
+            loadMinecraftStatus();
+        });
 
-    chips[0].classList.add("active");
-    renderCards();
-  </script>
+    </script>
 </body>
 </html>
